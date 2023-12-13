@@ -1,0 +1,105 @@
+---
+import type { Props } from "@astrojs/starlight/props";
+
+const { labels } = Astro.props;
+import { Icon } from "@astrojs/starlight/components";
+---
+
+<template id="theme-icons">
+  <Icon name="sun" class="light" />
+  <Icon name="moon" class="dark" />
+  <Icon name="laptop" class="auto" />
+</template>
+
+<starlight-theme-select>
+  <button class="rounded-full aspect-square flex justify-center items-center shadow p-2" aria-label={labels["themeSelect.accessibleLabel"]}>
+    <Icon name="laptop" class="label-icon" />
+  </button>
+</starlight-theme-select>
+
+{/* Inlined to avoid FOUC. Uses global scope from `ThemeProvider.astro` */}
+<script is:inline>
+  StarlightThemeProvider.updatePickers();
+</script>
+
+<script>
+  type Theme = "auto" | "dark" | "light";
+
+  class StarlightThemeSelect extends HTMLElement {
+    /** Key in `localStorage` to store color theme preference at. */
+    #key = "starlight-theme";
+
+    constructor() {
+      super();
+      this.#onThemeChange(this.#loadTheme());
+      const button = this.querySelector("button");
+
+      if (button) {
+        button.addEventListener("click", (e) => {
+          this.#flipTheme();
+        });
+      }
+    }
+
+    /** Get a typesafe theme string from any JS value (unknown values are coerced to `'auto'`). */
+    #getCurrentTheme(): "dark" | "light" {
+      let currentTheme = this.#loadTheme();
+      if (currentTheme === "auto") {
+        currentTheme = this.#getPreferredColorScheme();
+      }
+      return currentTheme as "dark" | "light";
+    }
+
+    #flipTheme(): void {
+      if (this.#getCurrentTheme() === "light") {
+        this.#onThemeChange(this.#parseTheme("dark"));
+      } else {
+        this.#onThemeChange(this.#parseTheme("light"));
+      }
+    }
+
+    /** Get a typesafe theme string from any JS value (unknown values are coerced to `'auto'`). */
+    #parseTheme(theme: unknown): Theme {
+      if (theme === "auto" || theme === "dark" || theme === "light") {
+        return theme;
+      } else {
+        return "auto";
+      }
+    }
+
+    /** Get the preferred system color scheme. */
+    #getPreferredColorScheme(): Theme {
+      return matchMedia("(prefers-color-scheme: light)").matches
+        ? "light"
+        : "dark";
+    }
+
+    /** Update select menu UI, document theme, and local storage state. */
+    #onThemeChange(theme: Theme): void {
+      StarlightThemeProvider.updatePickers(theme);
+      document.documentElement.dataset.theme =
+        theme === "auto" ? this.#getPreferredColorScheme() : theme;
+      this.#storeTheme(theme);
+    }
+
+    /** Store the user’s preference in `localStorage`. */
+    #storeTheme(theme: Theme): void {
+      if (typeof localStorage !== "undefined") {
+        if (theme === "light" || theme === "dark") {
+          localStorage.setItem(this.#key, theme);
+        } else {
+          localStorage.removeItem(this.#key);
+        }
+      }
+    }
+
+    /** Load the user’s preference from `localStorage`. */
+    #loadTheme(): Theme {
+      const theme =
+        typeof localStorage !== "undefined" && localStorage.getItem(this.#key);
+      return this.#parseTheme(theme);
+    }
+  }
+
+  customElements.define("starlight-theme-select", StarlightThemeSelect);
+</script>

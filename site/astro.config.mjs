@@ -36,6 +36,9 @@ export default defineConfig({
         },
       ],
       customCss: ["./src/tailwind.css"],
+      components: {
+        ThemeSelect: "./src/components/ToggleTheme.astro",
+      },
     }),
     tailwind({ applyBaseStyles: false }),
   ],

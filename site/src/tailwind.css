@@ -6,3 +6,12 @@
 Add additional Tailwind styles to this file, for example with @layer:
 https://tailwindcss.com/docs/adding-custom-styles#using-css-and-layer
 */
+
+.site-title > span {
+  color: var(--sl-color-white);
+}
+
+.header {
+  background: var(--sl-color-black);
+  border: none;
+}
