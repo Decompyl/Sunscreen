@@ -4,7 +4,7 @@ description: Get started building your docs site with Starlight.
 template: splash
 hero:
   title: |
-    Welcome to Starlight with
+    Block out the distractions with 
     <span
       class="font-black text-transparent
         bg-clip-text bg-gradient-to-t
@@ -13,7 +13,9 @@ hero:
     >
       Sunscreen
     </span>
-  tagline: Congrats on setting up a new Starlight project!
+  tagline: Coming soon...
+  image:
+    file: ../../assets/sunscreen-logo.svg
   actions:
     - text: Get Started
       link: /getting-started
@@ -21,21 +23,21 @@ hero:
       variant: primary
 ---
 
-import { Card, CardGrid } from "@astrojs/starlight/components";
+import { Card, CardGrid } from '@astrojs/starlight/components';
 
 ## Next steps
 
 <CardGrid stagger>
-  <Card title="Update content" icon="pencil">
-    Edit `src/content/docs/index.mdx` to see this page change.
-  </Card>
-  <Card title="Add new content" icon="add-document">
-    Add Markdown or MDX files to `src/content/docs` to create new pages.
-  </Card>
-  <Card title="Configure your site" icon="setting">
-    Edit your `sidebar` and other config in `astro.config.mjs`.
-  </Card>
-  <Card title="Read the docs" icon="open-book">
-    Learn more in [the Starlight Docs](https://starlight.astro.build/).
-  </Card>
+	<Card title="Update content" icon="pencil">
+		Edit `src/content/docs/index.mdx` to see this page change.
+	</Card>
+	<Card title="Add new content" icon="add-document">
+		Add Markdown or MDX files to `src/content/docs` to create new pages.
+	</Card>
+	<Card title="Configure your site" icon="setting">
+		Edit your `sidebar` and other config in `astro.config.mjs`.
+	</Card>
+	<Card title="Read the docs" icon="open-book">
+		Learn more in [the Starlight Docs](https://starlight.astro.build/).
+	</Card>
 </CardGrid>
