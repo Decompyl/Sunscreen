@@ -12,7 +12,10 @@ import { Icon } from "@astrojs/starlight/components";
 </template>
 
 <starlight-theme-select>
-  <button class="rounded-full aspect-square flex justify-center items-center shadow p-2" aria-label={labels["themeSelect.accessibleLabel"]}>
+  <button
+    class="rounded-full aspect-square flex justify-center items-center shadow p-2"
+    aria-label={labels["themeSelect.accessibleLabel"]}
+  >
     <Icon name="laptop" class="label-icon" />
   </button>
 </starlight-theme-select>
@@ -23,6 +26,12 @@ import { Icon } from "@astrojs/starlight/components";
 </script>
 
 <script>
+  declare global {
+    class StarlightThemeProvider {
+      static updatePickers(theme?: Theme): void;
+    }
+  }
+
   type Theme = "auto" | "dark" | "light";
 
   class StarlightThemeSelect extends HTMLElement {
@@ -35,7 +44,7 @@ import { Icon } from "@astrojs/starlight/components";
       const button = this.querySelector("button");
 
       if (button) {
-        button.addEventListener("click", (e) => {
+        button.addEventListener("click", () => {
           this.#flipTheme();
         });
       }
